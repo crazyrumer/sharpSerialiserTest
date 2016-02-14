@@ -40,3 +40,7 @@ UnityVS/
 incrementalSave/*
 UnityVS*
 *.BridgeLabelsAndRatings
+Assets/Assembly-CSharp-vs.csproj
+Assets/Assembly-CSharp.csproj
+Assets/Assets-csharp.sln
+Assets/Assets.sln

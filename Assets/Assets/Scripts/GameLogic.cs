@@ -25,7 +25,7 @@ public class GameLogic : BaseClass
         ChangeState( _default );
     }
 
-    public GameState CurrentState { get { return _currentState; } set { _currentState = value; } }
+    public GameState CurrentState { get { return _currentState; }  }
     public int Counter { get { return _counter; } }
 
     public void Update()
