@@ -8,29 +8,23 @@ public class GameState
     private GameLogic _gameLogic  = null;
     protected GameLogic GameLogic { get { return _gameLogic; } }
 
-    public GameState( GameLogic gameLogic )
+    public GameState( )
     {
-        Init( gameLogic );
-    }
+        if ( Main.Instance.GameLogic != null )
+        {
+            _gameLogic = Main.Instance.GameLogic;
+        }
 
-    // required by serializer
-    public GameState()
-    { 
-    }
-
-    private void Init(GameLogic gameLogic)
-    {
-        _gameLogic = gameLogic;
     }
 
     public virtual void Enter()
     {
-
+        _gameLogic = Main.Instance.GameLogic;
     }
 
     public virtual void Exit()
     {
-
+        _gameLogic = null;
     }
 
     public virtual void Update()
@@ -40,6 +34,6 @@ public class GameState
 
     public void Load( GameLogic gameLogic )
     {
-        Init( gameLogic );
+        
     }
 }

@@ -4,26 +4,34 @@ using System;
 using System.IO;
 using Polenter.Serialization;
 
-public class Main : MonoBehaviour
+public class Main : Manager<Main>
 {
     [SerializeField]
     private bool _loadOnStart = false;
 
     private GameLogic _gameLogic = null;
+    public GameLogic GameLogic { get { return _gameLogic; } }
 
-    private void Awake()
+    protected override void Awake()
     {
-        Init();
-    }
+        base.Awake();
 
-    private void Init()
-    {
         _gameLogic = new GameLogic();
 
         if ( _loadOnStart )
         {
             PersistenceManager.Instance.Load();
         }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+    }
+
+    private void Start()
+    {
+        _gameLogic.Start();    
     }
 
     private void Update()

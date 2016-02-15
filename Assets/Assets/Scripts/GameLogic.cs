@@ -3,13 +3,21 @@ using System.Collections;
 
 public class GameLogic : BaseClass
 {
-    private GameState _currentState = null;
+    private GameLogicSerialisable _glSerialisable = null;
     private Default   _default = null;
     private Increment _increment = null;
     private Decrement _decrement = null;
 
-
-    private int _counter = 0;
+    public int Counter 
+    { 
+        get { return _glSerialisable.Counter; } 
+        private set { _glSerialisable.Counter = value; } 
+    }
+    public GameState CurrentState 
+    { 
+        get { return _glSerialisable.CurrentState; }
+        private set { _glSerialisable.CurrentState = value; }
+    }
 
     public GameLogic()
         :base()
@@ -18,47 +26,49 @@ public class GameLogic : BaseClass
     }
     private void Init()
     {
-        _default   = new Default( this );
-        _increment = new Increment( this );
-        _decrement = new Decrement( this );
+        _glSerialisable = new GameLogicSerialisable();
 
-        ChangeState( _default );
+        Counter = 0;
+
+        _default   = new Default( );
+        _increment = new Increment( );
+        _decrement = new Decrement( );
     }
 
-    public GameState CurrentState { get { return _currentState; }  }
-    public int Counter { get { return _counter; } }
-
-    public void Update()
+    public void Start()
     {
-        if ( _currentState != null )
-        {
-            _currentState.Update();
-        }
+        ChangeState( _default );
     }
 
     protected override void OnSave( Data data )
     {
-        data.GameLogicContainer.Counter = _counter;
-        data.GameLogicContainer.CurrentState = _currentState;
+        data.GameLogicSerialisable = _glSerialisable;
     }
 
     protected override void OnLoad( Data data )
     {
-        _counter = data.GameLogicContainer.Counter;
-        _currentState = data.GameLogicContainer.CurrentState;
-        _currentState.Load( this );
+        _glSerialisable = data.GameLogicSerialisable;
+    }
+
+
+    public void Update()
+    {
+        if ( CurrentState != null )
+        {
+            CurrentState.Update();
+        }
     }
 
     private void ChangeState( GameState state )
     {
-        if ( _currentState != null )
+        if ( CurrentState != null )
         {
-            _currentState.Exit();
+            CurrentState.Exit();
         }
 
-        _currentState = state;
+        CurrentState = state;
 
-        _currentState.Enter();
+        CurrentState.Enter();
     }
 
     public void ChangeToIncrement()
@@ -78,11 +88,18 @@ public class GameLogic : BaseClass
 
     public void IncrementCounter()
     {
-        _counter++;
+        Counter++;
     }
 
     public void DecrementCounter()
     {
-        _counter--;
+        Counter--;
     }
+}
+
+public class GameLogicSerialisable
+{
+    public int Counter { get; set; }
+
+    public GameState CurrentState { get; set; }
 }
